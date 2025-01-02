@@ -73,7 +73,7 @@ class Ui_MainWindow(QMainWindow):
 "border:0.5px solid red;")
         self.Close_13.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(r"ICONS\material-symbols--close-small-rounded.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(r"ICONS/material-symbols--close-small-rounded.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Close_13.setIcon(icon)
         self.Close_13.setIconSize(QtCore.QSize(30, 30))
         self.Close_13.setObjectName("Close_13")
@@ -117,7 +117,7 @@ class Ui_MainWindow(QMainWindow):
         self.verticalLayout_39.setObjectName("verticalLayout_39")
         self.frame_63 = QtWidgets.QFrame(self.frame_62)
         self.frame_63.setMinimumSize(QtCore.QSize(0, 50))
-        self.frame_63.setMaximumSize(QtCore.QSize(100, 8))
+        self.frame_63.setMaximumSize(QtCore.QSize(150, 8))
         self.frame_63.setSizeIncrement(QtCore.QSize(0, 0))
         self.frame_63.setStyleSheet("background-color:transparent;\n"
 "color: rgb(255, 255, 255);")
@@ -369,11 +369,19 @@ class Ui_MainWindow(QMainWindow):
         font = QtGui.QFont()
         font.setPointSize(9)
         self.Close_14.setFont(font)
-        self.Close_14.setStyleSheet("background-color: rgb(0, 0, 0);\n"
-"border:0.5px solid red;")
+        self.Close_14.setStyleSheet("""
+    QPushButton {
+        background-color: rgb(0, 0, 0);
+        border: 0.5px solid red;
+    }
+    QPushButton:hover {
+        background-color: white;
+        border: 0.5px solid red;
+    }
+""")
         self.Close_14.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(r"ICONS\material-symbols--close-small-rounded.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(r"ICONS/material-symbols--close-small-rounded.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Close_14.setIcon(icon)
         #Close Button
         self.Close_14.clicked.connect(self.close)
@@ -408,13 +416,14 @@ class Ui_MainWindow(QMainWindow):
 
 
     def check_license_key(self):
-        license_key=self.lineEdit.text()
+        license_key=self.lineEdit.text()#adsfghj
         device_id=self.get_device_id()
     
         try:
             # Connect to Django backend
-            url = "http://192.168.173.218:8000/api/validate-key/"
-            response = requests.post(url, json={"key": license_key,"device_id":device_id})
+            # url = "http://192.168.173.218:8000/api/validate-key/"
+            url = "https://paid.pythonanywhere.com/api/validate-key/"
+            response = requests.post(url, json={"key": license_key})
 
             if response.status_code == 200 or response.status_code == 202:
                 self.save_license_key(license_key, device_id)
@@ -426,6 +435,9 @@ class Ui_MainWindow(QMainWindow):
 
             elif response.status_code == 400:
                 print("You Enterd Wrong Key!")
+            else:
+                print("You Enterd Wrong Key!")
+
 
         except requests.exceptions.RequestException as e:
             print("Error connecting to server:", e)
@@ -444,7 +456,7 @@ class Ui_MainWindow(QMainWindow):
                     device_id=token_data.get("Device_Id")
 
                     # Validate the license key with django backend
-                    url = "http://192.168.173.218:8000/api/validate-key/"
+                    url = "https://paid.pythonanywhere.com/api/validate-key/"
                     response = requests.post(url, json={"key": license_key,"device_id":device_id})
 
                     if response.status_code == 202:
